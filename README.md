@@ -1,159 +1,56 @@
-#  SOC Project: Brute Force Attack Detection using Splunk
+##  Real SOC Operational Context
 
-##  Overview
+In a real Security Operations Centre (SOC), brute-force attacks are detected as part of continuous monitoring of authentication logs.
 
-This project demonstrates the detection and analysis of brute-force login attacks using SIEM (Splunk). It is designed to simulate real-world Security Operations Centre (SOC) Tier 1 workflows, including alert monitoring, triage, investigation, and incident reporting.
+SOC analysts operate under strict SLAs where:
 
-The goal of this project is to showcase practical cybersecurity skills in log analysis, threat detection, and incident response aligned with SOC operations.
+- Tier 1 analysts must triage alerts within minutes
+- High-confidence brute-force attempts are escalated immediately to Tier 2
+- Analysts must reduce false positives through correlation and context enrichment
 
----
 
-##  Objectives
+## Alert Triage Decision Logic
 
-* Detect brute-force login attempts using SIEM queries
-* Analyse authentication logs to identify suspicious behaviour
-* Simulate SOC alert triage and escalation workflows
-* Document findings in a structured incident report
-* Map detection to MITRE ATT&CK framework
+Severity classification is based on:
 
----
+- Low: 3–5 failed attempts (user error likely)
+- Medium: 5–10 failed attempts (suspicious activity)
+- High: 10+ attempts or multi-user targeting (confirmed attack pattern)
 
-##  Tools & Technologies
+Escalation Rules:
+- Tier 1 handles initial triage and validation
+- Tier 2 handles deeper forensic analysis and containment
 
-* SIEM: Splunk
-* Log Source: Linux authentication logs (`auth.log`)
-* Techniques: Log analysis, threat detection, incident investigation
 
----
+## Analyst Thinking Process
 
-##  Detection Logic
+As a SOC analyst, the following questions guide investigation:
 
-### Splunk Query Used
+- Is this a user error or automated attack?
+- Is the IP attempting multiple accounts?
+- Is there a successful login after failures?
+- Is this part of a wider attack campaign?
 
-```
-index=auth_logs sourcetype=linux_secure
-"Failed password"
-| stats count by src_ip, user
-| where count > 5
-| sort - count
-```
 
-### Detection Explanation
+##  Real-World SOC Limitations
 
-This query identifies repeated failed login attempts from the same source IP and user account. A threshold of more than 5 failed attempts is used to flag potential brute-force activity.
+- High volume of authentication logs can lead to alert fatigue
+- Attackers may use distributed IPs to bypass detection thresholds
+- Legitimate users may trigger false positives
 
----
 
-## Threat Scenario
+This project simulates a real SOC Tier 1 investigation and demonstrates practical experience in SIEM-based threat detection, log analysis, and incident response workflows.
 
-Brute-force attacks involve repeated login attempts using different password combinations to gain unauthorised access to user accounts. These attacks can lead to account compromise if successful.
 
----
 
-##  Investigation Process (SOC Workflow)
 
-1. **Alert Identification**
 
-   * Multiple failed login attempts detected from a single IP
+##  Portfolio Value
 
-2. **Triage**
+This project demonstrates practical SOC Tier 1 capabilities including:
 
-   * Classified as **Medium to High severity** based on frequency
-
-3. **Analysis**
-
-   * Checked number of attempts per user
-   * Identified targeted accounts
-   * Reviewed log timestamps and patterns
-   * Looked for successful login after failed attempts
-
-4. **Validation**
-
-   * Pattern consistent with brute-force behaviour
-
-5. **Escalation**
-
-   * Escalated to Tier 2 SOC for further investigation
-
----
-
-##  Key Indicators of Compromise (IOCs)
-
-* Suspicious Source IP (e.g., 192.168.x.x)
-* High number of failed login attempts (>5 threshold)
-* Repeated targeting of specific user accounts
-
----
-
-##  Incident Report Summary
-
-###  Incident Description
-
-Detected multiple failed login attempts from a single source IP targeting one or more user accounts.
-
-###  Impact
-
-Potential risk of account compromise and unauthorised access.
-
-###  Response Actions
-
-* Blocked suspicious IP address
-* Recommended password reset for affected accounts
-* Suggested enabling Multi-Factor Authentication (MFA)
-* Increased monitoring for similar activity
-
----
-
-##  Dashboard Insights (Conceptual)
-
-* Failed login trends over time
-* Top attacking IP addresses
-* Most targeted user accounts
-
----
-
-##  MITRE ATT&CK Mapping
-
-* **Technique:** T1110 – Brute Force
-* **Tactic:** Credential Access
-
----
-
-##  Key Skills Demonstrated
-
-* SIEM Monitoring & Alert Triage
-* Log Analysis & Threat Detection
-* Incident Investigation & Reporting
-* SOC Workflow Understanding
-* Cyber Threat Analysis
-
----
-
-##  Project Structure
-
-```
-soc-bruteforce-detection-splunk/
-│
-├── README.md
-├── detection-queries/
-│   └── brute_force_query.txt
-├── sample-logs/
-│   └── auth_logs_sample.txt
-├── dashboards/
-│   └── dashboard_description.md
-├── incident-report/
-│   └── brute_force_case_study.md
-```
-
----
-
-##  Conclusion
-
-This project demonstrates how brute-force attacks can be detected and analysed using SIEM tools within a SOC environment. It highlights practical skills in identifying threats, performing investigations, and responding to security incidents.
-
----
-
-##  Author
-
-Shaheer Ul Islam
-Cybersecurity MSc | SOC Analyst (Aspiring)
+- SIEM-based threat detection
+- Brute-force attack identification
+- Log correlation and analysis
+- Incident escalation decision-making
+- Structured SOC reporting workflow

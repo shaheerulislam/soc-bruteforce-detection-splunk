@@ -1,27 +1,36 @@
-SOC Detection Rule: Brute Force Authentication Attempts
+Detection Name: Brute Force Authentication Attack (SIEM Rule)
 
-Data Source:
-- Linux authentication logs (auth.log)
+SOC Context:
+This detection identifies repeated failed login attempts against user accounts, indicating a potential brute-force attack targeting credential access.
 
-Threat Type:
-- Brute Force Attack (Credential Access)
+Why This Matters:
+Brute-force attacks are commonly used by threat actors to gain unauthorized access by guessing passwords. This aligns with MITRE ATT&CK technique T1110 (Brute Force).
 
-MITRE ATT&CK:
-- T1110 (Brute Force)
+Detection Logic (Splunk Query):
 
-Detection Logic:
-This query detects repeated failed login attempts from the same IP and user account.
-
-Splunk Query:
 index=auth_logs sourcetype=linux_secure "Failed password"
 | stats count by src_ip, user
 | where count > 5
 | sort - count
 
 Alert Condition:
-Trigger alert when failed login attempts > 5 within short time window.
+Trigger when failed login attempts exceed 5 within a short time window.
 
-Expected Output:
-- Source IP
-- Target username
-- Number of failed attempts
+SOC Analyst Actions:
+- Validate if source IP is known or malicious
+- Check if multiple users are targeted
+- Look for successful login after failed attempts
+- Escalate to Tier 2 SOC if pattern indicates automation or high frequency attack
+
+Severity Classification:
+- Low: 3–5 attempts (user error likely)
+- Medium: 5–10 attempts (suspicious behaviour)
+- High: 10+ attempts or multi-user targeting (confirmed brute-force attack)
+
+False Positive Considerations:
+- Users mistyping passwords
+- Service misconfiguration causing repeated authentication failures
+- Automated internal scripts
+
+SOC Value:
+Demonstrates SIEM-based threat detection, log correlation, and Tier 1 SOC triage workflow.

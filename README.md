@@ -1,29 +1,38 @@
-SOC Brute Force Detection & Windows Event Log Analysis
+SOC Brute Force Detection & Windows Event Log Analysis using Splunk SIEM
 
 Project Overview
-This project simulates a real-world SOC (Security Operations Centre) investigation using Splunk Enterprise.
-The objective is to detect brute-force authentication attempts and analyse Windows Event Logs to identify suspicious login behaviour and system anomalies.
-This project demonstrates end-to-end SOC Tier 1 analysis including log ingestion, detection engineering, and incident interpretation.
+This investigation simulates a SOC Tier 1 alert triage workflow for brute-force authentication activity using Splunk Enterprise.The project focuses on identifying suspicious authentication behaviour through Windows Event Logs, analysing failed login patterns, and demonstrating how SOC analysts detect and investigate potential credential-based attacks.
 
 Objectives
 Ingest Windows Event Logs into Splunk SIEM
-Detect brute-force login attempts using SPL queries
-Analyse authentication failures and system events
-Identify suspicious patterns in login behaviour
-Demonstrate SOC investigation workflow
+Detect brute-force authentication attempts using SPL queries
+Analyse repeated failed login patterns and system events
+Demonstrate SOC Tier 1 investigation and triage workflow
+Translate raw logs into actionable security insights
 
-SOC Scenario
-A simulated attack pattern was generated using authentication logs containing repeated failed login attempts. The goal was to identify brute-force behaviour and analyse system-level security events.
-This reflects a common SOC Tier 1 use case: credential-based attack detection.
+Alert Context
+Detected activity represents a potential low-to-medium severity brute-force authentication pattern, requiring investigation for repeated login attempts and source correlation. Such behaviour is commonly associated with credential-guessing attacks targeting Windows environments.
 
+SOC Incident Scenario
+A simulated brute-force attack pattern was generated using authentication logs containing repeated failed login attempts.
+The investigation focused on:
+Repeated authentication failures
+Potential credential-guessing behaviour
+System-level anomalies in Windows event logs
 
- Tools & Technologies
+This reflects a real SOC Tier 1 use case where analysts investigate authentication-based attack patterns.
+
+Detection Approach
+The Splunk query aggregates authentication failures to identify repeated login attempts from the same host, user, or source.
+This helps detect potential brute-force attack behaviour based on frequency and repetition patterns.
+
+Tools & Technologies
 Splunk Enterprise
 Windows Event Logs
+Syslog / Authentication Logs
 SPL (Search Processing Language)
-Syslog / Authentication logs
 
-Detection Query (Brute Force Analysis)
+Detection Logic (Brute Force Analysis)
 index=main sourcetype="WinEventLog:Application"
 | search "failed" OR "Failed password"
 | stats count by host, user, source
@@ -31,38 +40,46 @@ index=main sourcetype="WinEventLog:Application"
 
 
 Key Findings
-Multiple failed login attempts detected from repeated sources
-Pattern indicates potential brute-force attack behaviour
-Windows Application logs showed repeated authentication failures
-Service-level errors also observed in system logs
+Multiple failed authentication attempts detected from repeated sources
+Pattern consistent with automated credential-guessing behaviour
+No successful authentication observed within attack window
+Windows Application logs confirmed repeated access attempts
+Logs successfully ingested and analysed in Splunk SIEM
+
+
+SOC Analyst Conclusion
+This activity is consistent with a brute-force authentication attempt targeting Windows services. 
+In a real SOC environment, this would trigger:
+
+Account lockout enforcement
+Source IP investigation and blocking
+Correlation with threat intelligence feeds
+Escalation to Tier 2 SOC for deeper analysis
+
+
+Detection Value
+This detection enables early identification of credential-based attacks before successful compromise occurs, supporting proactive threat mitigation in SOC environments.
 
 Evidence of Execution
 Log Ingestion Success
 Windows Event Log Analysis
 Detection Query Results
 
-
-SOC Analyst Conclusion
-The repeated authentication failures indicate a potential brute-force attack attempt. In a real SOC environment, this would trigger:
-Alert escalation to Tier 2 SOC
-IP address investigation
-Account lockout policy validation
-Threat intelligence correlation
-
-
 Skills Demonstrated
-SIEM log ingestion & configuration
-Security event analysis
+SIEM log ingestion and configuration
+Security event analysis using Splunk
 Brute-force attack detection
-SOC alert investigation workflow
-SPL query development
+SOC alert triage and investigation workflow
+SPL query development and optimization
 Windows Event Log interpretation
 
+SOC Value
+This project demonstrates practical SOC Tier 1 capabilities:
+Threat detection and monitoring
+Log-based security analysis
+Incident investigation workflow
+SIEM-based detection engineering
+Security event correlation
 
-Business / SOC Value
-This project demonstrates practical SOC Tier 1 capabilities in:
-
-Threat detection
-Security monitoring
-Incident analysis
-Log-based investigation
+Final Statement
+This project simulates a real SOC investigation workflow using Splunk SIEM, demonstrating hands-on skills in threat detection, log analysis, and security incident triage.

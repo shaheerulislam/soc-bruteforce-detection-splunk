@@ -1,15 +1,26 @@
-SOC Detection Rule: Successful Login After Multiple Failures
+Detection Name: Successful Login After Multiple Failed Attempts
 
-Threat Type:
-Possible account compromise after brute-force attempt
+SOC Context:
+This detection identifies a successful authentication following multiple failed login attempts, which may indicate a compromised account after a brute-force attack.
 
-Detection Logic:
-Detects successful login following multiple failed attempts from same IP.
+Why This Matters:
+Attackers often succeed after repeated password guessing attempts. Detecting successful login after failures helps identify credential compromise.
 
-Splunk Query:
+Detection Logic (Splunk Query):
+
 index=auth_logs sourcetype=linux_secure
 ("Failed password" OR "Accepted password")
 | stats count by src_ip, user, message
 
-Purpose:
-Identifies successful authentication after brute-force attempts.
+SOC Analyst Actions:
+- Verify legitimacy of login activity
+- Compare IP address history and reputation
+- Check time correlation between failed and successful logins
+- Escalate if abnormal login pattern is confirmed
+
+Severity Guidance:
+- Medium: Single user affected
+- High: Successful login after high number of failures
+
+SOC Value:
+Demonstrates behavioural correlation analysis and post-compromise detection capability.

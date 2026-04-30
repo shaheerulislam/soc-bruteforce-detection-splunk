@@ -1,5 +1,27 @@
-index=auth_logs sourcetype=linux_secure
-"Failed password"
+SOC Detection Rule: Brute Force Authentication Attempts
+
+Data Source:
+- Linux authentication logs (auth.log)
+
+Threat Type:
+- Brute Force Attack (Credential Access)
+
+MITRE ATT&CK:
+- T1110 (Brute Force)
+
+Detection Logic:
+This query detects repeated failed login attempts from the same IP and user account.
+
+Splunk Query:
+index=auth_logs sourcetype=linux_secure "Failed password"
 | stats count by src_ip, user
 | where count > 5
 | sort - count
+
+Alert Condition:
+Trigger alert when failed login attempts > 5 within short time window.
+
+Expected Output:
+- Source IP
+- Target username
+- Number of failed attempts

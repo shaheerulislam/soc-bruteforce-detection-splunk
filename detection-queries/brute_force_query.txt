@@ -1,0 +1,5 @@
+index=auth_logs sourcetype=linux_secure
+"Failed password"
+| stats count by src_ip, user
+| where count > 5
+| sort - count

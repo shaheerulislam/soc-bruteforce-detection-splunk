@@ -1,9 +1,26 @@
-SOC Detection Rule: Multi-User Brute Force Activity
+Detection Name: Multi-User Brute Force Attack Detection
 
-Detection Logic:
-Identifies a single IP targeting multiple user accounts.
+SOC Context:
+This detection identifies a single source IP attempting to authenticate against multiple user accounts, which is indicative of automated brute-force or credential stuffing attacks.
 
-Splunk Query:
+Why This Matters:
+Attackers often target multiple accounts to increase chances of successful compromise.
+
+Detection Logic (Splunk Query):
+
 index=auth_logs sourcetype=linux_secure "Failed password"
 | stats dc(user) as users_targeted count by src_ip
 | where users_targeted > 3
+
+SOC Analyst Actions:
+- Identify if IP belongs to internal or external network
+- Check for distributed attack patterns
+- Correlate with other authentication logs
+- Escalate if multiple accounts are affected
+
+Severity Classification:
+- Medium: 3–5 users targeted
+- High: 5+ users or rapid attack frequency
+
+SOC Value:
+Demonstrates multi-entity correlation and detection of distributed brute-force activity.

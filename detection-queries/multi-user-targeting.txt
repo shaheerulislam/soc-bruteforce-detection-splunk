@@ -1,0 +1,9 @@
+SOC Detection Rule: Multi-User Brute Force Activity
+
+Detection Logic:
+Identifies a single IP targeting multiple user accounts.
+
+Splunk Query:
+index=auth_logs sourcetype=linux_secure "Failed password"
+| stats dc(user) as users_targeted count by src_ip
+| where users_targeted > 3
